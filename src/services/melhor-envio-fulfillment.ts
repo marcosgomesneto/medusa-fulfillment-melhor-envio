@@ -119,10 +119,10 @@ class MelhorEnvioFulfillmentService extends AbstractFulfillmentService {
     const products = cart.items.map((item) => {
       return {
         id: item.id,
-        width: item.variant.width || 10,
-        height: item.variant.height || 10,
-        length: item.variant.length || 10,
-        weight: item.variant.weight || 0.5,
+        width: item.variant.width || item.variant.product.width || 10,
+        height: item.variant.height || item.variant.product.height || 10,
+        length: item.variant.length || item.variant.product.length || 10,
+        weight: item.variant.weight || item.variant.product.weight || 0.5,
         quantity: item.quantity,
       };
     });

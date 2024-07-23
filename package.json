@@ -1,6 +1,6 @@
 {
     "name": "@marcosgn/medusa-fulfillment-melhor-envio",
-    "version": "1.0.0",
+    "version": "1.0.1",
     "description": "Medusa plugin to integrate with Melhor Envio fulfillment service",
     "main": "dist/index.js",
     "repository": {

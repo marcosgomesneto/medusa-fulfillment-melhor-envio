@@ -1,6 +1,7 @@
 export interface Options extends Record<string, unknown> {
   apiToken: string;
   postalCode: string;
+  sandbox: string | boolean;
 }
 
 export interface CalculateRequest {

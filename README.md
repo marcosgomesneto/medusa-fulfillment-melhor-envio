@@ -58,6 +58,7 @@ const plugins = [
     options: {
       apiToken: process.env.MELHOR_ENVIO_API_TOKEN,
       postalCode: process.env.MELHOR_ENVIO_POSTAL_CODE,
+      sandbox: process.env.ENVIRONMENT, // Set true or "development" to use the sandbox environment
     },
   },
 ];

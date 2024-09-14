@@ -8,15 +8,19 @@ import {
 class Client {
   private readonly axios: axios.AxiosInstance;
 
-  constructor(token: string) {
+  constructor(token: string, sandbox: string | boolean = false) {
+    const baseURL =
+      (typeof sandbox === 'string' && sandbox.toLowerCase() === "development") || sandbox === true
+        ? "https://sandbox.melhorenvio.com.br/api/v2"
+        : "https://melhorenvio.com.br/api/v2";
+
     this.axios = axios.default.create({
-      baseURL: "https://melhorenvio.com.br/api/v2",
+      baseURL,
       headers: {
         Authorization: `Bearer ${token}`,
       },
     });
   }
-
   async getShippingServices(): Promise<ShippingServiceItem[]> {
     const response = await this.axios.get("/me/shipment/calculate");
     return response.data;

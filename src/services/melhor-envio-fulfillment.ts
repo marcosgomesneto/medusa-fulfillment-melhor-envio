@@ -20,7 +20,7 @@ class MelhorEnvioFulfillmentService extends AbstractFulfillmentService {
     super(container);
 
     this.options = options;
-    this.client = new MelhorEnvioClient(options.apiToken);
+    this.client = new MelhorEnvioClient(options.apiToken, options.sandbox);
   }
 
   async getFulfillmentOptions(): Promise<FulfillmentItemOption[]> {

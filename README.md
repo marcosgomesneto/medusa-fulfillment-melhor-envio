@@ -15,13 +15,13 @@ Add integrated shipping calculation in your MedusaJS project with most product c
 ## Prerequisites
 
 - [Medusa backend](https://docs.medusajs.com/development/backend/install)
-- [Melhor Envio account](https://melhorenvio.com.br/)
+- [Melhor Envio account](https://melhorenvio.com.br/) or [Sandbox](https://sandbox.melhorenvio.com.br/)
 
 ## Contribute with:
 
 - ⭐ Starred this repository
 - [Follow me](https://github.com/marcosgomesneto) in github
-- Report [Inssues](https://github.com/marcosgomesneto/medusa-fulfillment-melhor-envio/issues)
+- Report [Issues](https://github.com/marcosgomesneto/medusa-fulfillment-melhor-envio/issues)
 
 ---
 
@@ -44,7 +44,7 @@ MELHOR_ENVIO_API_TOKEN=<your-token>
 MELHOR_ENVIO_POSTAL_CODE=<from-postal-code>
 ```
 
-Get your token from the Melhor Envio dashboard: https://melhorenvio.com.br.
+Get your token from the Melhor Envio dashboard: https://melhorenvio.com.br or https://sandbox.melhorenvio.com.br.
 
 Set origin zip code in the variable `MELHOR_ENVIO_POSTAL_CODE` with only numbers. This is used for shipping calculation.
 
@@ -63,6 +63,10 @@ const plugins = [
   },
 ];
 ```
+
+## New Feature: Dynamic Postal Code
+
+Starting from version `1.1.0`, you can define a custom origin postal code at the variant level. If a `variant` has the `originCEP` set in its `metadata`, this postal code will be used for shipping calculations instead of the default postal code set in `MELHOR_ENVIO_POSTAL_CODE`.
 
 ---
 

@@ -108,15 +108,19 @@ class MelhorEnvioFulfillmentService extends AbstractFulfillmentService {
     data: { [x: string]: unknown },
     cart: Cart
   ): Promise<number> {
-    if (!cart.shipping_address?.postal_code)
+    if (!cart.shipping_address?.postal_code) {
       throw new Error("No postal code provided in shipping address");
+    }
 
-    const toPostaCode = cart.shipping_address.postal_code.replace(
+    const toPostalCode = cart.shipping_address.postal_code.replace(
       /[^0-9]/g,
       ""
     );
 
-    const products = cart.items.map((item) => {
+    const getProductDetails = (item: LineItem) => {
+      const originCEP =
+        (item.variant.metadata?.originCEP as string) || this.options.postalCode;
+
       return {
         id: item.id,
         width: item.variant.width || item.variant.product.width || 10,
@@ -124,35 +128,61 @@ class MelhorEnvioFulfillmentService extends AbstractFulfillmentService {
         length: item.variant.length || item.variant.product.length || 10,
         weight: item.variant.weight || item.variant.product.weight || 0.5,
         quantity: item.quantity,
+        originCEP,
       };
-    });
-
-    const request: CalculateRequest = {
-      from: {
-        postal_code: this.options.postalCode,
-      },
-      to: {
-        postal_code: toPostaCode,
-      },
-      products: products,
-      options: {
-        receipt: false,
-        own_hand: false,
-      },
-      services: optionData.external_id.toString(),
     };
 
-    const response = await this.client.getShippingPrices(request);
+    const groupedProducts: Record<string, any[]> = cart.items.reduce(
+      (groups, item) => {
+        const productDetails = getProductDetails(item);
+        const originCEP = productDetails.originCEP;
 
-    if (!response.price)
-      throw new Error(response.error || "No price returned from Melhor Envio");
+        if (!groups[originCEP]) {
+          groups[originCEP] = [];
+        }
+        groups[originCEP].push(productDetails);
+        return groups;
+      },
+      {}
+    );
 
-    if (Number.isNaN(+response.price))
-      throw new Error("Price is not an integer");
+    let totalShippingCost = 0;
 
-    const price = +response.price;
+    for (const originCEP in groupedProducts) {
+      const products = groupedProducts[originCEP];
 
-    return Math.trunc(price * 100);
+      const request: CalculateRequest = {
+        from: {
+          postal_code: originCEP,
+        },
+        to: {
+          postal_code: toPostalCode,
+        },
+        products: products,
+        options: {
+          receipt: false,
+          own_hand: false,
+        },
+        services: optionData.external_id.toString(),
+      };
+
+      const response = await this.client.getShippingPrices(request);
+
+      if (!response.price) {
+        throw new Error(
+          response.error || "No price returned from Melhor Envio"
+        );
+      }
+
+      if (Number.isNaN(+response.price)) {
+        throw new Error("Price is not an integer");
+      }
+
+      const price = +response.price;
+      totalShippingCost += Math.trunc(price * 100);
+    }
+
+    return totalShippingCost;
   }
   async createFulfillment(
     data: { [x: string]: unknown },

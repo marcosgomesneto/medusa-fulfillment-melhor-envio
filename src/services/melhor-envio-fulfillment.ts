@@ -118,8 +118,8 @@ class MelhorEnvioFulfillmentService extends AbstractFulfillmentService {
     );
 
     const getProductDetails = (item: LineItem) => {
-      const originCEP =
-        (item.variant.metadata?.originCEP as string) || this.options.postalCode;
+      const postalCodeOrigin =
+        (item.variant.metadata?.postalCodeOrigin as string) || this.options.postalCode;
 
       return {
         id: item.id,
@@ -128,19 +128,19 @@ class MelhorEnvioFulfillmentService extends AbstractFulfillmentService {
         length: item.variant.length || item.variant.product.length || 10,
         weight: item.variant.weight || item.variant.product.weight || 0.5,
         quantity: item.quantity,
-        originCEP,
+        postalCodeOrigin,
       };
     };
 
     const groupedProducts: Record<string, any[]> = cart.items.reduce(
       (groups, item) => {
         const productDetails = getProductDetails(item);
-        const postalCodeOrigin = productDetails.originCEP;
+        const postalCodeOrigin = productDetails.postalCodeOrigin;
 
-        if (!groups[originCEP]) {
-          groups[originCEP] = [];
+        if (!groups[postalCodeOrigin]) {
+          groups[postalCodeOrigin] = [];
         }
-        groups[originCEP].push(productDetails);
+        groups[postalCodeOrigin].push(productDetails);
         return groups;
       },
       {}
@@ -149,11 +149,11 @@ class MelhorEnvioFulfillmentService extends AbstractFulfillmentService {
     let totalShippingCost = 0;
 
     for (const postalCodeOrigin in groupedProducts) {
-      const products = groupedProducts[originCEP];
+      const products = groupedProducts[postalCodeOrigin];
 
       const request: CalculateRequest = {
         from: {
-          postal_code: originCEP,
+          postal_code: postalCodeOrigin,
         },
         to: {
           postal_code: toPostalCode,

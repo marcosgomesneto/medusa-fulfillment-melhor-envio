@@ -66,7 +66,7 @@ const plugins = [
 
 ## New Feature: Dynamic Postal Code
 
-Starting from version `1.1.0`, you can define a custom origin postal code at the variant level. If a `variant` has the `originCEP` set in its `metadata`, this postal code will be used for shipping calculations instead of the default postal code set in `MELHOR_ENVIO_POSTAL_CODE`.
+Starting from version `1.1.0`, you can define a custom origin postal code at the variant level. If a `variant` has the `postalCodeOrigin` set in its `metadata`, this postal code will be used for shipping calculations instead of the default postal code set in `MELHOR_ENVIO_POSTAL_CODE`.
 
 ---
 

@@ -2,7 +2,7 @@
 
 ## 1.1.0
 
-- Implemented dynamic postal code functionality. If the `variant` has an `originCEP` in its `metadata`, that value will be used as the origin postal code for shipping calculations. If `originCEP` is not present, the default postal code from the environment variable `MELHOR_ENVIO_POSTAL_CODE` will be used.
+- Implemented dynamic postal code functionality. If the `variant` has an `postalCodeOrigin` in its `metadata`, that value will be used as the origin postal code for shipping calculations. If `postalCodeOrigin` is not present, the default postal code from the environment variable `MELHOR_ENVIO_POSTAL_CODE` will be used.
 
 ## 1.0.3
 

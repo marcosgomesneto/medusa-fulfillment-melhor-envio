@@ -148,7 +148,7 @@ class MelhorEnvioFulfillmentService extends AbstractFulfillmentService {
 
     let totalShippingCost = 0;
 
-    for (const originCEP in groupedProducts) {
+    for (const postalCodeOrigin in groupedProducts) {
       const products = groupedProducts[originCEP];
 
       const request: CalculateRequest = {

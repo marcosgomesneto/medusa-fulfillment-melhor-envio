@@ -135,7 +135,7 @@ class MelhorEnvioFulfillmentService extends AbstractFulfillmentService {
     const groupedProducts: Record<string, any[]> = cart.items.reduce(
       (groups, item) => {
         const productDetails = getProductDetails(item);
-        const originCEP = productDetails.originCEP;
+        const postalCodeOrigin = productDetails.originCEP;
 
         if (!groups[originCEP]) {
           groups[originCEP] = [];
